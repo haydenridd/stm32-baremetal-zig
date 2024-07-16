@@ -15,7 +15,6 @@ MEMORY
 }
 
 /* Set stack start to the end of RAM (stack grows from high memory addresses -> low) */
-/* TODO: Unable to reference at comptime w/ Zig :( */
 PROVIDE(__stack = ORIGIN(RAM) + LENGTH(RAM));
 
 SECTIONS
