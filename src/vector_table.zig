@@ -14,20 +14,18 @@ fn defaultHandler() callconv(.C) noreturn {
 
 const resetHandler = @import("startup.zig").resetHandler;
 
-// This is hard coded the same way it is in the linker script,
-// because it appears there's no way to access the address of a
-// linker defined symbol at comptime. So the symbol __stack exists,
-// and &__stack will yield this same address, however that operation
-// isn't permitted at comptime.
-const ram_start_offset: u32 = 0x20000000;
-const ram_length: u32 = 320 * 1024;
+/// The __stack symbol we defined in our linker script for where the stack pointer should
+/// start (the very end of RAM). Note is given the type "anyopaque" as this symbol is
+/// only ever meant to be used by taking the address with &. It doesn't actually "point"
+/// to anything valid at all!
+extern var __stack: anyopaque;
 
 /// The actual instance of our vector table we will export into the section
 /// ".isr_vector", ensuring it is placed at the beginning of flash memory.
 /// Actual interrupt handlers (rather than the defaultHandler) could be added
 /// by assigning them in struct instantiation.
 const vector_table: VectorTable = .{
-    .initial_stack_pointer = ram_start_offset + ram_length,
+    .initial_stack_pointer = &__stack,
 };
 
 /// Note that any interrupt function is specified to use the "C" calling convention.
@@ -45,7 +43,7 @@ const IsrFunction = *const fn () callconv(.C) void;
 /// all fields are ultimately a u32, so silently added padding bytes
 /// aren't a concern.
 const VectorTable = extern struct {
-    initial_stack_pointer: u32,
+    initial_stack_pointer: *anyopaque,
     Reset_Handler: IsrFunction = resetHandler,
     NMI_Handler: IsrFunction = defaultHandler,
     HardFault_Handler: IsrFunction = defaultHandler,
