@@ -32,7 +32,9 @@ export fn main() callconv(.C) noreturn {
         // Toggle pin 15 bit
         GPIOA_ODR.* ^= 0x8000;
         var i: u32 = 0;
-        while (i < 1_000_000) {
+        while (i < 10_000_000) {
+            // Critical so that the compiler doesn't optimize out this loop
+            asm volatile ("nop");
             i += 1;
         }
     }
