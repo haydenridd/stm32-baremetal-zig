@@ -3,6 +3,14 @@ const std = @import("std");
 // To avoid circular dependencies between main.zig and startup.zig
 extern fn main() noreturn;
 
+pub inline fn enableInterrupts() void {
+    asm volatile ("cpsie i" ::: "memory");
+}
+
+pub inline fn disableInterrupts() void {
+    asm volatile ("cpsid i" ::: "memory");
+}
+
 pub fn resetHandler() callconv(.C) noreturn {
     const startup_locations = struct {
         extern var _sbss: u8;
@@ -11,6 +19,9 @@ pub fn resetHandler() callconv(.C) noreturn {
         extern var _edata: u8;
         extern const _sidata: u8;
     };
+
+    // Disable interrupts during initialization, although they should start disabled anyways
+    disableInterrupts();
 
     // fill .bss with zeroes
     {
@@ -30,6 +41,9 @@ pub fn resetHandler() callconv(.C) noreturn {
 
         @memcpy(data_start[0..data_len], data_src[0..data_len]);
     }
+
+    // Re-enable interrupts before calling main()
+    enableInterrupts();
 
     main();
 }
