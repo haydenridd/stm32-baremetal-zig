@@ -6,7 +6,7 @@ pub fn build(b: *std.Build) void {
         .cpu_arch = .thumb,
         .os_tag = .freestanding,
         .abi = .eabihf,
-        .cpu_model = std.zig.CrossTarget.CpuModel{ .explicit = &std.Target.arm.cpu.cortex_m7 },
+        .cpu_model = std.Target.Query.CpuModel{ .explicit = &std.Target.arm.cpu.cortex_m7 },
         // Note that "fp_armv8d16sp" is the same instruction set as "fpv5-sp-d16", so LLVM only has the former
         // https://github.com/llvm/llvm-project/issues/95053
         .cpu_features_add = std.Target.arm.featureSet(&[_]std.Target.arm.Feature{std.Target.arm.Feature.fp_armv8d16sp}),
@@ -24,8 +24,7 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/main.zig"),
     });
 
-    blinky_exe.setLinkerScriptPath(b.path("linker/STM32F750N8Hx.ld"));
-
+    blinky_exe.setLinkerScript(b.path("linker/STM32F750N8Hx.ld"));
     blinky_exe.link_gc_sections = true;
     blinky_exe.link_data_sections = true;
     blinky_exe.link_function_sections = true;

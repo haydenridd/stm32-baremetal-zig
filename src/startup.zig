@@ -49,7 +49,7 @@ pub fn resetHandler() callconv(.C) noreturn {
 }
 
 pub fn exportStartSymbol() void {
-    @export(resetHandler, .{
+    @export(&resetHandler, .{
         .name = "_start",
     });
 }

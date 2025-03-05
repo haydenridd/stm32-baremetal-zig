@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub fn exportVectorTable() void {
-    @export(vector_table, .{
+    @export(&vector_table, .{
         .name = "vector_table",
         .section = ".isr_vector",
         .linkage = .strong,
