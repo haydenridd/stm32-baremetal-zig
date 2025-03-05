@@ -1,5 +1,6 @@
 .{
-    .name = "stm32_baremetal",
+    .fingerprint = 0x6a1aab98404c2f79,
+    .name = .stm32_baremetal,
     .version = "0.0.0",
     .paths = .{
         "build.zig",
