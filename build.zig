@@ -14,14 +14,20 @@ pub fn build(b: *std.Build) void {
     const executable_name = "blinky";
 
     const optimize = b.standardOptimizeOption(.{});
-    const blinky_exe = b.addExecutable(.{
-        .name = executable_name ++ ".elf",
+
+    const blinky_mod = b.addModule(executable_name, .{
+        .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
         .link_libc = false,
-        .linkage = .static,
+        .sanitize_c = false, // Currently important if including any C files b/c of https://github.com/ziglang/zig/issues/23052, otherwise binary can get bloated
         .single_threaded = true,
-        .root_source_file = b.path("src/main.zig"),
+    });
+
+    const blinky_exe = b.addExecutable(.{
+        .name = executable_name ++ ".elf",
+        .root_module = blinky_mod,
+        .linkage = .static,
     });
 
     blinky_exe.setLinkerScript(b.path("linker/STM32F750N8Hx.ld"));

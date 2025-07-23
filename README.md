@@ -5,4 +5,4 @@ An extremely simple example of implementing a "blinky" program on an STM32F750N8
 Includes a SEGGER Ozone debugging script + MCU SVD file for those who use that debugger.
 
 ## Zig Version
-This repo will track the most recent released version of Zig while it is still in development. Currently, this targets Zig version `0.14.0`. 
+This repo will track the most recent released version of Zig while it is still in development. Currently, this targets Zig version `0.14.1`. 
