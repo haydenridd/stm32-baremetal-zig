@@ -7,8 +7,14 @@ pub fn tickHandler() callconv(.C) void {
     tick_counter +%= 1;
 }
 
-/// Note that this does NOT guarantee atomic access, we're sort of lazily
-/// relying on single word accesses being inherently atomic on this chip.
+/// Note that the volatile access does NOT guarantee atomic access. We are just relying
+/// on the fact that single word accesses are atomic on this CPU. If instead of
+/// just reading a value we had to do a read-modify-write sequence, we would need to disable/re-enable
+/// interrupts like so to prevent data races
+///
+/// disableInterrupts()
+/// tick_counter = tick_counter * 5;
+/// enableInterrupts()
 pub fn getTicks() u32 {
 
     // Volatile access to ensure this variable access can NOT
