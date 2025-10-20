@@ -39,7 +39,7 @@ fn busyWait(milliseconds: u32) void {
     while ((getTicks() -% start_ticks) < milliseconds) {}
 }
 
-export fn main() callconv(.C) noreturn {
+export fn main() callconv(.c) noreturn {
 
     // Internal HSI clock is 16 MHz, and is the default used on this chip after boot
     const system_clock_freq = 16_000_000;
