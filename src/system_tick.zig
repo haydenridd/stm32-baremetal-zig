@@ -2,7 +2,7 @@ const std = @import("std");
 
 var tick_counter: u32 = 0;
 
-pub fn tickHandler() callconv(.C) void {
+pub fn tickHandler() callconv(.c) void {
     // Fancy addition that allows this tick counter to overflow + wrap back around to 0
     tick_counter +%= 1;
 }

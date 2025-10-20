@@ -20,7 +20,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
         .link_libc = false,
-        .sanitize_c = false, // Currently important if including any C files b/c of https://github.com/ziglang/zig/issues/23052, otherwise binary can get bloated
+        .sanitize_c = null, // Currently important if including any C files b/c of https://github.com/ziglang/zig/issues/23052, otherwise binary can get bloated
         .single_threaded = true,
     });
 
