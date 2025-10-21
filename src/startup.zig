@@ -4,14 +4,14 @@ const std = @import("std");
 extern fn main() noreturn;
 
 pub inline fn enableInterrupts() void {
-    asm volatile ("cpsie i" ::: "memory");
+    asm volatile ("cpsie i" ::: .{ .memory = true });
 }
 
 pub inline fn disableInterrupts() void {
-    asm volatile ("cpsid i" ::: "memory");
+    asm volatile ("cpsid i" ::: .{ .memory = true });
 }
 
-pub fn resetHandler() callconv(.C) noreturn {
+pub fn resetHandler() callconv(.c) noreturn {
     const startup_locations = struct {
         extern var _sbss: u8;
         extern var _ebss: u8;

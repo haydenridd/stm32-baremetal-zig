@@ -8,7 +8,7 @@ pub fn exportVectorTable() void {
     });
 }
 
-fn defaultHandler() callconv(.C) noreturn {
+fn defaultHandler() callconv(.c) noreturn {
     while (true) {}
 }
 
@@ -28,13 +28,13 @@ const vector_table: VectorTable = .{
     .initial_stack_pointer = &__stack,
 };
 
-/// Note that any interrupt function is specified to use the "C" calling convention.
+/// Note that any interrupt function is specified to use the "c" calling convention.
 /// This is because Zig's calling convention could differ from C. C being the defacto
 /// "standard" for function calling conventions, it's what the processor expects when
 /// it branches to one of these functions. Normal functions in application code, however
 /// can use normal Zig function definitions. These functions are "special" in the sense
 /// that they are being called by "hardware" directly.
-const IsrFunction = *const fn () callconv(.C) void;
+const IsrFunction = *const fn () callconv(.c) void;
 
 /// An "extern" struct here is used here to create a
 /// struct that has the same memory layout as a C struct.
