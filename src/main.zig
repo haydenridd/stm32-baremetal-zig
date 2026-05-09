@@ -36,6 +36,10 @@ const SYSTICK_VAL: *volatile u32 = @as(*volatile u32, @ptrFromInt(SYSTICK_BASE +
 fn busyWait(milliseconds: u32) void {
     const start_ticks = getTicks();
     // Important to use wrapping subtraction here for when the tick counter might be on the edge of overflowing
+    // - Note that the volatile access within getTicks() is critical here, as otherwise the compiler could reasonably
+    //   "optimize" this block to be while(true) {}. This is because we don't change the variable "tick_counter" anywhere
+    //   in our program code, the only function that changes tick_counter is tickHandler() and we don't explicitly call
+    //   that, it's called by the processor itself and is thus outside the compiler's knowledge.
     while ((getTicks() -% start_ticks) < milliseconds) {}
 }
 
